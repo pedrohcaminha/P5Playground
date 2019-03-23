@@ -1,6 +1,6 @@
 let r = 400;
 let times =1000;
-let mult = 0;
+let mult = 2;
 let tax = 0.05;
 let red = 0;
 let green = 0;
@@ -19,7 +19,7 @@ function draw(){
 	background(0);
 	fill(255);
 	textSize(20);
-	text(mult-mult%1, 10, 30);
+	text(mult, 10, 30);
 	ellipse(r, r, r*2, r*2);
 	stroke(red,green,blue);
 	let x = mult;
