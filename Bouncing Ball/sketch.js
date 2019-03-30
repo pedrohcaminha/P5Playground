@@ -1,9 +1,9 @@
-function preload() {
-	soundFormats('mp3');
-	bounce = loadSound('bounce.mp3');
-  }
+// function preload() {
+// 	soundFormats('mp3');
+// 	bounce = loadSound('bounce.mp3');
+//   }
 function setup() {
-	bounce.setVolume(0.5);
+	// bounce.setVolume(0.5);
 	createCanvas(windowWidth, windowHeight);
 	
 }
@@ -23,13 +23,13 @@ function draw() {
 		if(x >= windowWidth | x<= 0){
 			a = -a;
 			
-			bounce.play();
+			// bounce.play();
 		}
 		cor = map(y, windowHeight, 0, 0, 255);
 		console.log(x);
 		if(y > windowHeight-15 | y < 29){
 			if(y>100)
-			bounce.play();
+			// bounce.play();
 			aceleracao = 1/aceleracao;
 		}
 	

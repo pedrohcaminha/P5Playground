@@ -6,7 +6,7 @@
 //Variaveis importantes
 let a = 1;
 let b = 10;
-let faixa = 1;
+let faixa = 4;
 
 //Codigo
 let qttd = [];
