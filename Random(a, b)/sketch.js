@@ -5,8 +5,8 @@
 
 //Variaveis importantes
 let a = 1;
-let b = 10;
-let faixa = 4;
+let b = 2;
+let faixa = 2;
 
 //Codigo
 let qttd = [];
@@ -21,7 +21,7 @@ function setup(){
     qttd[i] = 1;
     red[i] = map(i, a, b, 100, 255);
   }
-  
+
 }
 function draw(){
   background(0);
@@ -57,7 +57,7 @@ function draw(){
   for(let i = a; i <= b; i++){
     // text(floor(qttd[i]/iterat*10000), 100, 60+((i-a)*20), 120, 80);
      string = str((qttd[i]/iterat).toFixed(5)).concat("% = ", str([i]))
-     
+
      text(string, 100, 60+((i-a)*20), 220, 80);
   }
   fill(0);

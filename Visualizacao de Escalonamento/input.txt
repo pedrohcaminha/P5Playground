@@ -1,0 +1,8 @@
+1 quantum 
+6 processos
+10
+5
+8
+20
+12
+20
