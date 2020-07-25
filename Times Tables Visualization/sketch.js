@@ -1,7 +1,7 @@
 let r = 400;
-let times =1000;
+let times =200;
 let mult = 2;
-let tax = 0.05;
+let tax = 1;
 let red = 0;
 let green = 0;
 let blue = 0;

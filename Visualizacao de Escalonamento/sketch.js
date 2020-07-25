@@ -9,48 +9,44 @@ let x = 0
 let processos
 let iterator = 0
 let tempos = []
+let retorno = []
 let txt
+let temposParaMedia = 0
+let width = 400
+let height = 300
 function preload() {
 	txt = loadStrings("input.txt")
 	
 }
 function setup() {
-	createCanvas(windowWidth, windowHeight)
-	// gui = createGui('p5.gui');
-	// gui.addGlobals('myColor', 'myAngle');
-	// frameRate()
+	createCanvas(windowWidth,windowHeight)
+
 	background(255)
-	// processos = floor(random(5,10))
 
 	processos = txt[1].split(" ")
 	processos = processos[0]
 	fract = txt[0].split(" ")
 	fract = fract[0]
 	frameRate(map(fract, 0, 30, 6, 1))
-	console.log(txt)
+	// console.log(txt)
+	console.log("PROCESSOS")
 	for(let i = 0; i < processos; i++){
 		// let tempo = floor(random(1,100))	
 		let tempo = int(txt[i+2])
 		// console.log(txt[i+2])
 		arr[i] = new processo(i, tempo)
-		console.log("processo")
-		console.log(i)
-		console.log("tempo")
-		console.log(tempo)
+		console.log("processo " + str(i) + " tempo " + str(tempo))
 		tempoTotal += tempo
 		quantidade++
 		tempos[i] = tempo
 	}
-	
-	y = windowHeight/quantidade
+
+	y = height/quantidade
+	translate(200, 200)
 }
 
 function draw() {
-	
-
-
-
-
+	translate(200, 200)
 	// roundrobin
 	largura = arr[(iterator)%quantidade].update()
 	// console.log(largura)
@@ -64,6 +60,14 @@ function draw() {
 	x += largura
 	// console.log(x)
 	iterator++
+	// if(x == width){
+	// 	console.log("TEMPO DE RETORNO")
+	// 	for(let j = 0; j<quantidade; j++){
+	// 		console.log(retorno[j])
+	// 	}
+	// 	console.log("TEMPO DE RETORNO MEDIO")
+	// 	console.log(temposParaMedia/quantidade)
+	// }
 }
 
 class processo {
@@ -76,14 +80,17 @@ class processo {
 
 
 	update(){
-		
+		// if(this.tempo <= fract & this.tempo > 0){
+		// 	retorno[this.ordem] = "processo " + str(this.ordem) + " tempo " + str((Math.round(map(x+largura, 0, width, 0, tempoTotal) * 100) / 100))
+		// 	temposParaMedia += ((Math.round(map(x+largura, 0, width, 0, tempoTotal) * 100) / 100))
+		// } 
 		if(this.tempo < fract){
 			let a = this.tempo
-			this.tempo = 0 
-			return map(a, 0, fract, 0, ((windowWidth)/tempoTotal)*fract)
+			this.tempo = 0
+			return map(a, 0, fract, 0, ((width)/tempoTotal)*fract)
 		}else{
 			this.tempo -= fract
-			return map(fract, 0, fract, 0, ((windowWidth)/tempoTotal)*fract)
+			return map(fract, 0, fract, 0, ((width)/tempoTotal)*fract)
 		}
 		
 	}
