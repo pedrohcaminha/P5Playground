@@ -1,116 +1,87 @@
-//Feito por PEDRO CAMINHA
-let y
-let arr = []
-let quantidade = 0
-let tempoTotal = 0
-let fract
-let largura
-let x = 0
-let processos
-let iterator = 0
-let tempos = []
-let retorno = []
-let txt
-let temposParaMedia = 0
-let width = 400
-let height = 300
-function preload() {
-	txt = loadStrings("input.txt")
+// array com o tempo necessario para cada processo ser processado
+let processos = [120, 90, 30, 30, 300, 30]
+// quantum de tempo do escalonador
+let quantum = 30
+// cor de cada processo para desenho
+let cores = [
+	873, 111, 93,
+	55, 114, 255,
+	223, 41, 53,
+	253, 202, 64,
+	76, 159, 112,
+	227, 185, 188
+]
+
+// tempo total necessario para processamento de todos os processos
+const reducer = (accumulator, currentValue) => accumulator + currentValue;
+let tempo_total = processos.reduce(reducer)
+// numero de janelas necessarias
+let janelas = tempo_total / quantum
+// altura e largura das janelas no desenho
+let largura_janela = 1000 / janelas
+let altura_janela = 800 / processos.length
+
+
+// funcao do P5 que inicia 
+function setup(){
+	// cria uma tela
+	createCanvas(1000, 800)
+	// desenha o fundo numa cor cinza (200, 200, 200)
+	background(200)
+
+	// funcao que desenha a moldura para os processos
+	desenhar_moldura()
+
+	// funcao que desenha todos os processos
+	desenhar_processos()
+}
+
+
+function desenhar_moldura(){
 	
-}
-function setup() {
-	createCanvas(windowWidth,windowHeight)
-
-	background(255)
-
-	processos = txt[1].split(" ")
-	processos = processos[0]
-	fract = txt[0].split(" ")
-	fract = fract[0]
-	frameRate(map(fract, 0, 30, 6, 1))
-	// console.log(txt)
-	console.log("PROCESSOS")
-	for(let i = 0; i < processos; i++){
-		// let tempo = floor(random(1,100))	
-		let tempo = int(txt[i+2])
-		// console.log(txt[i+2])
-		arr[i] = new processo(i, tempo)
-		console.log("processo " + str(i) + " tempo " + str(tempo))
-		tempoTotal += tempo
-		quantidade++
-		tempos[i] = tempo
-	}
-
-	y = height/quantidade
-	translate(200, 200)
-}
-
-function draw() {
-	translate(200, 200)
-	// roundrobin
-	largura = arr[(iterator)%quantidade].update()
-	// console.log(largura)
-	for(let i = 0; i < processos; i++){
-		if(i == (iterator)%quantidade){
-			arr[i].show(true)
-		}else{
-			arr[i].show(false)
-		}
-	}
-	x += largura
-	// console.log(x)
-	iterator++
-	// if(x == width){
-	// 	console.log("TEMPO DE RETORNO")
-	// 	for(let j = 0; j<quantidade; j++){
-	// 		console.log(retorno[j])
-	// 	}
-	// 	console.log("TEMPO DE RETORNO MEDIO")
-	// 	console.log(temposParaMedia/quantidade)
-	// }
-}
-
-class processo {
-	constructor(ordem, tempo) {
-		// console.log(ordem)
-		this.tempo = tempo
-		this.ordem = ordem
-		this.cor = color(random(0,255), random(0,255),random(0,255))
-	}
-
-
-	update(){
-		// if(this.tempo <= fract & this.tempo > 0){
-		// 	retorno[this.ordem] = "processo " + str(this.ordem) + " tempo " + str((Math.round(map(x+largura, 0, width, 0, tempoTotal) * 100) / 100))
-		// 	temposParaMedia += ((Math.round(map(x+largura, 0, width, 0, tempoTotal) * 100) / 100))
-		// } 
-		if(this.tempo < fract){
-			let a = this.tempo
-			this.tempo = 0
-			return map(a, 0, fract, 0, ((width)/tempoTotal)*fract)
-		}else{
-			this.tempo -= fract
-			return map(fract, 0, fract, 0, ((width)/tempoTotal)*fract)
-		}
-		
-	}
-
-	show(pintar){
-		// noStroke()
-		strokeWeight(0.1)
-		if (pintar){
-			
-			fill(this.cor)
-			rect(x, y*this.ordem, largura, y)
-			// fill(0)
-			// text(str(this.tempo+1), x+4, y*this.ordem+20)
-			
-		}else{
+	// percorre as janelas necessarias para processar tudo
+	for(let i = 0; i < janelas; i++){
+		// bota quantas linhas vao ser necessarias (um projeto = uma linha)
+		for(let j = 0; j < processos.length; j ++){
+			// preenche o retangulo com branco e define a largura da linha como 4
 			fill(255)
-			rect(x, y*this.ordem, largura, y)
-			
+			stroke(4)
+			// desenha o retangulo a partir do ponto (largura_janela * i, altura_janela * j) com a largura e a altura definidos
+			rect(largura_janela * i, altura_janela * j, largura_janela, altura_janela)
 		}
-		
-		// text(str(this.tempo), x, y*this.ordem)
 	}
+}
+
+function desenhar_processo(i, j, indice_do_processo){
+	// pega o RGB referente ao processo e preenche o retangulo
+	fill(cores[indice_do_processo*3], cores[indice_do_processo*3 + 1],cores[indice_do_processo*3 + 2])
+	// desenha o retangulo com uma estrategia similar ao desenhar_moldura()
+	rect(largura_janela * i, altura_janela * j, largura_janela, altura_janela)
+}
+
+function desenhar_processos(){
+
+	// FIFO
+
+	// Indice do processo
+	let indice = 0
+
+	// Etapa de computacao
+	let indicejanela = 0
+
+
+	while(processos.reduce(reducer) != 0){
+		// desenha o processo na tabela e reduz o tempo ja computado 
+		desenhar_processo(indicejanela, indice, indice)
+		processos[indice] -= quantum
+
+		// se o processo terminou de ser computado, seguiremos em frente
+		if(processos[indice] == 0){
+			indice ++
+		}
+
+		// a cada rodada do while, devemos incrementar a etapa de computacao
+		indicejanela++
+	}
+
 }
